@@ -1,0 +1,62 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!1 &8876560337633228128
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 8876560337633228134}
+  - component: {fileID: 8876560337633228129}
+  m_Layer: 0
+  m_Name: Surface Manager2
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &8876560337633228134
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 8876560337633228128}
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 63.290417, y: 5.727077, z: 74.197754}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_Children: []
+  m_Father: {fileID: 0}
+  m_RootOrder: 0
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &8876560337633228129
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 8876560337633228128}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 95b119c6dd52dd8499bab905c1dd1f67, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  surfaceProperties:
+  - surfaceType: 0
+    decalprefab: {fileID: 3658441623069852763, guid: e65714d08892b554e937043eca126817, type: 3}
+    bulletImpact: {fileID: 100000, guid: cae283c880c5e9a4593b474dfbcb3154, type: 3}
+    impactSound: {fileID: 8300000, guid: 9666d5ddef597cb40863d4a01c7ab3c4, type: 3}
+  - surfaceType: 1
+    decalprefab: {fileID: 555836982698003106, guid: 2a3df4b6873ac914299e3885829c2446, type: 3}
+    bulletImpact: {fileID: 100006, guid: 7e39de0af1681954b9dd97d5ab3cf899, type: 3}
+    impactSound: {fileID: 8300000, guid: b99454746ba422342918d2c6979c344a, type: 3}
+  - surfaceType: 3
+    decalprefab: {fileID: 3814046684905956723, guid: 292a337531169f049964916e23a9696e, type: 3}
+    bulletImpact: {fileID: 100002, guid: 28bbf9615a4fa9a4f906305297d89b0a, type: 3}
+    impactSound: {fileID: 8300000, guid: de1b96a56a3a95e41a3cfb6d133cf874, type: 3}
+  - surfaceType: 2
+    decalprefab: {fileID: 4247037266482422484, guid: 1e25dc759a06a6a4caa12a328d537853, type: 3}
+    bulletImpact: {fileID: 100002, guid: f93f3f64c93ad61449d7d45134840955, type: 3}
+    impactSound: {fileID: 8300000, guid: ecacdee1958c33d4fa743bef2db5a949, type: 3}
