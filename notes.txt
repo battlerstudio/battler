@@ -50,6 +50,20 @@ add many modes for multiplayer like flag capture,
 
 add game currency
 
+add skins
+
+add battle pass
+
+add redeem code
+
+add gift system
+
+add tps camera and swiching
+
+add modular weapon system like warzone
+
+add wall run
+
 
 
 
