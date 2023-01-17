@@ -62,7 +62,15 @@ add tps camera and swiching
 
 add modular weapon system like warzone
 
+add modular player system 
+
 add wall run
+
+add mini games for xp and ...
+
+
+add customizable crosshair
+
 
 
 
