@@ -6,6 +6,8 @@ using NaughtyAttributes;
 
 public class WeaponShooter : MonoBehaviour
 {
+
+    [Tooltip("Projecttile for rpg and bullet for normal guns")]
     public enum ShooterType {BULLET,PROJECTILE }
     public ShooterType shooterType = ShooterType.BULLET;
     // muzzle flash settings
@@ -507,4 +509,6 @@ public class WeaponShooter : MonoBehaviour
             scoped = false;
         }
     }
+
+    
 }
