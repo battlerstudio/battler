@@ -22,7 +22,7 @@ public class ReloadManager : StateMachineBehaviour
             if (stateInfo.normalizedTime>0.15f)
             {
                 rocket.enabled = true;
-            }
+            }            
         }
     }
 
