@@ -8,7 +8,7 @@ public class WeaponShooter : MonoBehaviour
 {
 
     [Tooltip("Projecttile for rpg and bullet for normal guns")]
-    public enum ShooterType {BULLET,PROJECTILE }
+    public enum ShooterType { BULLET, PROJECTILE }
     public ShooterType shooterType = ShooterType.BULLET;
     // muzzle flash settings
     [Header("Muzzle flash")]
@@ -29,14 +29,14 @@ public class WeaponShooter : MonoBehaviour
     // shooter settings
     [Header("Shooter Settings")]
     public LayerMask hitLayer;
-    [ShowIf("shooterType",ShooterType.BULLET)]public Bullet bullet;
+    [ShowIf("shooterType", ShooterType.BULLET)] public Bullet bullet;
     [ShowIf("shooterType", ShooterType.BULLET)] public int bulletPerShot = 1;
     public float fireDeltatime;
-    [Range(0,0.1f)] public float defaultSpread;
+    [Range(0, 0.1f)] public float defaultSpread;
     [ShowIf("shooterType", ShooterType.BULLET)] public float bulletDelay;
     public Vector3 defaultCamRecoil;
     private Vector3 camRecoil;
-    private float previousFireTime=0;
+    private float previousFireTime = 0;
     private GameObject decalprefab;
     private GameObject bulletImpact;
     private AudioClip impactSound;
@@ -48,7 +48,7 @@ public class WeaponShooter : MonoBehaviour
 
     // Projectile Settings
     [Header("Projectile Settings")]
-    [ShowIf("shooterType",ShooterType.PROJECTILE)]public GameObject projectile;
+    [ShowIf("shooterType", ShooterType.PROJECTILE)] public GameObject projectile;
     [ShowIf("shooterType", ShooterType.PROJECTILE)] public Transform projectileSpawnPoint;
     [ShowIf("shooterType", ShooterType.PROJECTILE)] public MeshRenderer rocket;
     [ShowIf("shooterType", ShooterType.PROJECTILE)] public float range;
@@ -92,7 +92,7 @@ public class WeaponShooter : MonoBehaviour
     public int reserveAmmo = 180;
     public bool inReloadingAnimation = false;
     private bool isReloading = false;
-    
+
 
     // GUI settings
     [Header("GUI Settings")]
@@ -103,8 +103,19 @@ public class WeaponShooter : MonoBehaviour
     private GameObject crossHair;
     private Text ammo;
 
+    // Camera Shake Setting
+    [Header("Camera Shake Settings")]
+    public float shakePower = 0.5f;
+    public float shakeDuration = 1.0f;
+    public Transform camera;
+    public float shakeSlowDownAmount = 1.0f;
+    public bool shouldShake = true;
+    private Vector3 shakeCameraStartPosition;
+    private float shakeInitialDuration;
+
     // camera recoil settings
     private RecoilController recoilController;
+
 
     void Awake()
     {
@@ -115,9 +126,9 @@ public class WeaponShooter : MonoBehaviour
         currentAmmoInMagazine = magazineSize;
         crossHair = GameObject.FindGameObjectWithTag("crosshair");
         weaponGUI = GameObject.FindGameObjectWithTag("WeaponGUI");
-        if (shooterType==ShooterType.BULLET)
+        if (shooterType == ShooterType.BULLET)
         {
-            if (bulletPerShot>1)
+            if (bulletPerShot > 1)
             {
                 ShooterFunction = MultipleShooter;
             }
@@ -144,17 +155,21 @@ public class WeaponShooter : MonoBehaviour
     }
     void Start()
     {
-        
+
         weaponAudioSource.clip = fireSound;
-        
+
         fpsCamera = Camera.main;
         bullet = Instantiate<Bullet>(bullet);
         defaultPosition = transform.localPosition;
         defaultCameraFOV = fpsCamera.fieldOfView;
-        
+
         spread = defaultSpread;
         recoilController = GetComponentInParent<RecoilController>();
         camRecoil = defaultCamRecoil;
+
+        // camera shake
+        shakeCameraStartPosition = fpsCamera.transform.localPosition;
+        shakeInitialDuration = shakeDuration;
     }
     void OnEnable()
     {
@@ -168,8 +183,9 @@ public class WeaponShooter : MonoBehaviour
 
         if (Input.GetMouseButton(0))
         {
-            if (Time.time - previousFireTime >= fireDeltatime && currentAmmoInMagazine >0 && !isReloading)
+            if (Time.time - previousFireTime >= fireDeltatime && currentAmmoInMagazine > 0 && !isReloading)
             {
+                
                 previousFireTime = Time.time;
                 muzzleFlash.Play();
                 weaponAudioSource.Play();
@@ -177,7 +193,7 @@ public class WeaponShooter : MonoBehaviour
                 currentAmmoInMagazine--;
                 fireDirection = fpsCamera.transform.forward + new Vector3(Random.Range(-spread, spread), Random.Range(-spread, spread), Random.Range(-spread, spread));
                 var recoilVector = new Vector3(camRecoil.x, Random.Range(-camRecoil.y, camRecoil.y), Random.Range(-camRecoil.z, camRecoil.z));
-                if (hasBulletTrail && ! hasWeaponSniperScope)
+                if (hasBulletTrail && !hasWeaponSniperScope)
                 {
                     recoilController.FireRecoil(recoilVector);
                     ShooterFunction();
@@ -188,7 +204,7 @@ public class WeaponShooter : MonoBehaviour
                     recoilController.FireRecoil(recoilVector);
                 }
                 EjectingShell();
-                
+
 
             }
 
@@ -201,20 +217,20 @@ public class WeaponShooter : MonoBehaviour
         if (Input.GetMouseButtonDown(1) && !isReloading)
         {
             isAiming = !isAiming;
-            if (routineReference!=null)
+            if (routineReference != null)
             {
                 StopCoroutine(routineReference);
             }
-            if (isAiming )
+            if (isAiming)
             {
-                routineReference= StartCoroutine(AimDownSights(aimOffset,aimCameraFOV));
+                routineReference = StartCoroutine(AimDownSights(aimOffset, aimCameraFOV));
                 animator.SetBool("aimed", true);
                 spread = aimSpread;
                 camRecoil = aimCamRecoil;
             }
             else
             {
-                routineReference= StartCoroutine(AimDownSights(defaultPosition,defaultCameraFOV));
+                routineReference = StartCoroutine(AimDownSights(defaultPosition, defaultCameraFOV));
                 animator.SetBool("aimed", false);
                 spread = defaultSpread;
                 camRecoil = defaultCamRecoil;
@@ -227,7 +243,7 @@ public class WeaponShooter : MonoBehaviour
                 StartCoroutine(Reload());
             }
         }
-        
+
     }
 
     private void EjectingShell()
@@ -267,12 +283,12 @@ public class WeaponShooter : MonoBehaviour
         }
         else
         {
-            trailRenderer.transform.position = fpsCamera.transform.position + fireDirection * bullet.range/10;
+            trailRenderer.transform.position = fpsCamera.transform.position + fireDirection * bullet.range / 10;
         }
     }
     private void SniperShooter()
     {
-        if (trail==null || TrailSpawner==null)
+        if (trail == null || TrailSpawner == null)
         {
             return;
         }
@@ -308,7 +324,7 @@ public class WeaponShooter : MonoBehaviour
                 SpawnDamage(hit);
             }
             else
-              StartCoroutine(BulletEffects(hit, bulletDelay));
+                StartCoroutine(BulletEffects(hit, bulletDelay));
         }
     }
     private void ProjectileShooter()
@@ -369,7 +385,7 @@ public class WeaponShooter : MonoBehaviour
             bulletImpact = bullet.defaultImpact;
             impactSound = bullet.defaultImpactSound;
             bullet.transform.position = hit.transform.position;
-            bullet.audioSource.PlayOneShot(impactSound);            
+            bullet.audioSource.PlayOneShot(impactSound);
         }
         GameObject decal = Instantiate(decalprefab, hit.point + hit.normal * 0.001f, Quaternion.LookRotation(hit.normal));
         GameObject impact = Instantiate(bulletImpact, hit.point, Quaternion.LookRotation(hit.normal));
@@ -385,8 +401,8 @@ public class WeaponShooter : MonoBehaviour
         SpawnForce(hit);
         SpawnDamage(hit);
     }
-    
-    private IEnumerator AimDownSights(Vector3 targetPosition,float targetCameraFOV)
+
+    private IEnumerator AimDownSights(Vector3 targetPosition, float targetCameraFOV)
     {
         OutScope();
         crossHair.SetActive(!crossHair.activeSelf);
@@ -394,13 +410,13 @@ public class WeaponShooter : MonoBehaviour
         float startCameraFOV = fpsCamera.fieldOfView;
         float t = 0;
         float lerpDuration = aimDuration;
-        float elapsedTime=0;
-        while (elapsedTime<=lerpDuration)
+        float elapsedTime = 0;
+        while (elapsedTime <= lerpDuration)
         {
             t = elapsedTime / lerpDuration;
             if (!hasWeaponSniperScope)
                 t = 1 - Mathf.Pow(1 - t, 4);
-            Vector3 nextPosition= Vector3.Lerp(startPosition, targetPosition, t);
+            Vector3 nextPosition = Vector3.Lerp(startPosition, targetPosition, t);
             transform.localPosition = nextPosition;
 
             // lerp camera FOV
@@ -455,7 +471,7 @@ public class WeaponShooter : MonoBehaviour
         {
             yield return null;
         }
-        
+
         int spentAmmo = magazineSize - currentAmmoInMagazine;
         if (reserveAmmo >= spentAmmo)
         {
@@ -472,7 +488,7 @@ public class WeaponShooter : MonoBehaviour
     private void WeaponGUIStart()
     {
         crossHair.GetComponent<Image>().sprite = crossHairImage;
-        if (weaponGUI!=null)
+        if (weaponGUI != null)
         {
             weaponGUI.transform.GetChild(0).gameObject.GetComponent<Text>().text = weaponName;
             weaponGUI.transform.GetChild(1).gameObject.GetComponent<Image>().sprite = weaponIconImage;
@@ -485,7 +501,7 @@ public class WeaponShooter : MonoBehaviour
     }
     private void InScope()
     {
-        if (!hasWeaponSniperScope || scopeUI==null || weaponCamera==null)
+        if (!hasWeaponSniperScope || scopeUI == null || weaponCamera == null)
         {
             return;
         }
@@ -510,5 +526,23 @@ public class WeaponShooter : MonoBehaviour
         }
     }
 
-    
+    private void CameraShake()
+    {
+        if (shouldShake)
+        {
+            if (shakeDuration > 0) {
+                fpsCamera.transform.localPosition = shakeCameraStartPosition + Random.insideUnitSphere * shakePower;
+                shakeDuration -= Time.deltaTime * shakeSlowDownAmount;
+            } else {
+                shouldShake = false;
+                shakeDuration = shakeInitialDuration;
+                fpsCamera.transform.localPosition = shakeCameraStartPosition;
+            }
+        }
+        else
+        {
+        }
+    }
+
+
 }

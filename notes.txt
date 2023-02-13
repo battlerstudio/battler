@@ -43,7 +43,7 @@ add traditional map like counter strike 1.6 for multiplayer
 add river to map with sharks
 add achievement system for users
 add offline play with bots
-
+add parkour system
 add lodouts like warzone
 
 add many modes for multiplayer like flag capture, 
@@ -68,8 +68,8 @@ add wall run
 
 add mini games for xp and ...
 
-
 add customizable crosshair
+
 
 
 
